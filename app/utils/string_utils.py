@@ -15,6 +15,7 @@ from app.utils.exception_utils import ExceptionUtils
 from app.utils.types import MediaType
 from config import Config
 
+
 class StringUtils:
 
     @staticmethod
@@ -109,6 +110,7 @@ class StringUtils:
             else:
                 return False
         return True
+
     @staticmethod
     def is_eng_media_name_format(word):
         pattern = r'^[a-zA-Z]+[a-zA-Z0-9\s._:@!@]*$'
@@ -133,7 +135,7 @@ class StringUtils:
             return True
         else:
             return False
-            
+
     @staticmethod
     def xstr(s):
         """
@@ -245,6 +247,8 @@ class StringUtils:
         if url2.startswith("http"):
             url2 = parse.urlparse(url2).netloc
         if url1.replace("www.", "") == url2.replace("www.", ""):
+            return True
+        if url1.split(".")[-1] == url2.split(".")[-1] and url1.split(".")[-2] == url2.split(".")[-2] == "m-team":
             return True
         return False
 
@@ -510,7 +514,7 @@ class StringUtils:
         """
         md5 = StringUtils.md5_hash_file(file_path)
         if not StringUtils.is_string_and_not_empty(md5) or \
-        not StringUtils.is_string_and_not_empty(original_md5):
+                not StringUtils.is_string_and_not_empty(original_md5):
             return True
         return md5 == original_md5
 

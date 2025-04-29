@@ -590,6 +590,23 @@ class Media:
             tmdb_info = self.__get_tmdb_tv_detail(tmdbid, append_to_response)
             if tmdb_info:
                 tmdb_info['media_type'] = MediaType.TV
+
+        # 默认采集原版海报
+        # 1. Now temporarily switch to English to get poster paths
+        self.__set_language("en")
+        if mtype == MediaType.MOVIE:
+            english_info = self.__get_tmdb_movie_detail(tmdbid, append_to_response)
+        else:
+            english_info = self.__get_tmdb_tv_detail(tmdbid, append_to_response)
+        # 2. Replace poster paths with English ones
+        if english_info:
+            if english_info.get('poster_path'):
+                tmdb_info['poster_path'] = english_info.get('poster_path')
+            if english_info.get('backdrop_path'):
+                tmdb_info['backdrop_path'] = english_info.get('backdrop_path')
+        # 3. Switch back to original language
+        self.__set_language(language)
+
         if tmdb_info:
             # 转换genreid
             tmdb_info['genre_ids'] = self.__get_genre_ids_from_detail(tmdb_info.get('genres'))
